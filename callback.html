@@ -1,0 +1,44 @@
+<!doctype html>
+<title>Authorisation code</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{color-scheme:light dark}
+body{max-width:38rem;margin:0 auto;padding:3rem 1.25rem;
+     font:16px/1.6 -apple-system,"Segoe UI",system-ui,sans-serif}
+h1{font-size:1.4rem;margin:0 0 .5rem}
+p{color:#6b7280;margin:0 0 1.5rem}
+#code{display:block;width:100%;box-sizing:border-box;padding:.9rem;
+      font:14px/1.5 ui-monospace,Menlo,monospace;word-break:break-all;
+      border:1px solid rgba(127,127,127,.4);border-radius:8px;background:transparent;
+      color:inherit;min-height:5rem}
+button{margin-top:.75rem;padding:.6rem 1.1rem;font:inherit;border-radius:8px;
+       border:1px solid rgba(127,127,127,.4);background:transparent;color:inherit;cursor:pointer}
+.err{color:#b91c1c}
+</style>
+<h1>Authorisation code</h1>
+<p id="hint">Copy this and paste it back into the terminal.</p>
+<textarea id="code" readonly></textarea>
+<button id="copy">Copy</button>
+<script>
+  var q = new URLSearchParams(location.search);
+  var box = document.getElementById("code");
+  var hint = document.getElementById("hint");
+  if (q.get("error")) {
+    hint.textContent = "TikTok returned an error.";
+    hint.className = "err";
+    box.value = q.get("error") + ": " + (q.get("error_description") || "");
+  } else if (q.get("code")) {
+    box.value = location.href;
+  } else {
+    hint.textContent = "Nothing here yet. This page only has something to show "
+      + "after TikTok redirects you to it.";
+    box.value = "";
+  }
+  document.getElementById("copy").onclick = function () {
+    box.select();
+    navigator.clipboard.writeText(box.value).then(
+      function () { this.textContent = "Copied"; }.bind(this),
+      function () { this.textContent = "Select and copy manually"; }.bind(this)
+    );
+  };
+</script>
