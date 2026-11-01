@@ -1,0 +1,6 @@
+# never, under any circumstances, in a public repo
+client_key
+client_secret
+*secret*
+*.env
+*.token
